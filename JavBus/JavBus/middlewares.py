@@ -4,6 +4,7 @@
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+from scrapy.http import HtmlResponse
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
@@ -83,10 +84,8 @@ class JavbusDownloaderMiddleware:
     def process_response(self, request, response, spider):
         # Called with the response returned from the downloader.
 
-        # Must either;
-        # - return a Response object
-        # - return a Request object
-        # - or raise IgnoreRequest
+        if response.encoding == "ascii":
+            response = HtmlResponse(url=response.url, body=response.body, encoding='utf-8')
         return response
 
     def process_exception(self, request, exception, spider):

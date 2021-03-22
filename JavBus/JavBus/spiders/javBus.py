@@ -1,5 +1,6 @@
 from datetime import datetime
 import re
+import random
 from urllib.parse import urljoin
 
 import scrapy
@@ -39,10 +40,34 @@ class JavBusSpider(scrapy.Spider):
         item['series'] = series.groups()[0] if series else " "
         category = re.match(".*?類別:(.*?)演員.*?", movie_info_string)
         item['category'] = category.groups()[0] if category else " "
-        # 下面两个是ajax请求的
-        # item['actors'] = re.match(r".*?演員 :(.*?)", movie_info_string).groups()[0]
-        # item['magnetic_connection'] = response.xpath('//table[@id="magnet-table"]//a/@href').extract()
-        item['actors'] = " "
-        item['magnetic_connection'] = " "
+        actors = response.xpath('//div[@class="star-name"]/a/@title').extract()
+        item['actors'] = ' '.join(actors) if actors else ' '
         
+        # 构造ajax请求，获取magnet
+        headers = {
+            'Host': 'www.javbus.com',
+            'Connection': 'keep-alive',
+            'sec-ch-ua': '"Google Chrome";v="89", "Chromium";v="89", ";Not A Brand";v="99"',
+            'Accept': '*/*',
+            'X-Requested-With': 'XMLHttpRequest',
+            'sec-ch-ua-mobile': '?0',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36',
+            'Sec-Fetch-Site': 'same-origin',
+            'Sec-Fetch-Mode': 'cors',
+            'Sec-Fetch-Dest': 'empty',
+            'Refer': 'https://www.javbus.com/SSIS-013',
+        }
+        site_text = response.text
+        lang = re.search(r'.*?var\slang\s=\s\'(.*?)\';.*?', site_text, re.M).groups()[0]
+        gid = re.search(r'.*?var\sgid\s=\s(.*?);.*?', site_text, re.M).groups()[0]
+        uc = re.search(r'.*?var\suc\s=\s(.*?);.*?', site_text, re.M).groups()[0]
+        img = re.search(r'.*?var\simg\s=\s\'(.*?)\';.*?', site_text, re.M).groups()[0]
+        magnet_url = f"https://www.javbus.com/ajax/uncledatoolsbyajax.php?gid={gid}&lang={lang}&img={img}&uc={uc}&floor={int(random.random() * 1000) + 1}"
+        yield scrapy.Request(url=magnet_url, meta={'item': item}, headers=headers, callback=self.get_magnet)
+    
+    def get_magnet(self, response):
+        # 可能会有重复的magnet，用set去重
+        magnets = set(response.xpath('//a/@href').extract())
+        item = response.meta.get('item')
+        item['magnetic_connection'] = ' '.join(magnets)
         return item
