@@ -27,7 +27,7 @@ class JavBusItem(scrapy.Item):
     actors = scrapy.Field(
         input_processor=MapCompose(sequence_convert_to_str)
     )  # 参演者
-    manufacturer = scrapy.Field()   # 制作商
+    manufacturer = scrapy.Field()  # 制作商
     series = scrapy.Field(
         input_processor=MapCompose(sequence_convert_to_str)
     )  # 系列
@@ -46,7 +46,7 @@ class JavBusItem(scrapy.Item):
         insert_sql = """
             INSERT INTO jav_bus(`name`, url, cover_image, serial_number, crawl_time, update_time, is_censored,
             actors, series, category, magnetic_connection, manufacturer, duration)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             ON DUPLICATE KEY UPDATE
             `name`=VALUES (`name`), url=VALUES (url), cover_image=VALUES (cover_image),
             serial_number=VALUES (serial_number), actors=VALUES (actors), series=VALUES (series),
@@ -65,6 +65,7 @@ class JavBusItem(scrapy.Item):
             self['series'],
             self['category'],
             self['magnetic_connection'],
-            self['manufacturer']
+            self['manufacturer'],
+            self['duration']
         )
         return insert_sql, params

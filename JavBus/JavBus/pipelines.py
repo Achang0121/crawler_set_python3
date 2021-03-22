@@ -11,7 +11,7 @@ from twisted.enterprise import adbapi
 from itemadapter import ItemAdapter
 
 
-class DemoPipeline:
+class JavBusPipeline:
     def process_item(self, item, spider):
         return item
 
