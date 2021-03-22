@@ -8,19 +8,20 @@ from JavBus.items import JavBusItem
 
 class JavBusSpider(scrapy.Spider):
     name = 'javBus'
-    allowed_domains = ['javbus.com']
-    start_urls = ['https://www.javbus.com/']
+    allowed_domains = ['javbus.com', 'javbus.one']
+    start_urls = ['https://www.javbus.com/', 'https://www.javbus.com/uncensored', 'https://www.javbus.one/']
     
     def parse(self, response, **kwargs):
         movies = response.xpath('//a[@class="movie-box"]')
         next_page_url = urljoin(response.url, response.xpath('//a[@id="next"]/@href').extract_first())
+        is_consored_flag = response.xpath('//ul[contains(@class, "nav")]//li[@class="active"]/a/text()').extract_first()
         for movie in movies:
             item = JavBusItem()
             item['name'] = movie.xpath('.//img/@title').extract_first()
             item['url'] = movie.xpath('./@href').extract_first()
             item['cover_image'] = movie.xpath('.//img/@src').extract_first()
             item['serial_number'] = item['url'].split("/")[-1]
-            item['is_censored'] = 0
+            item['is_censored'] = 1 if is_consored_flag == "有碼" else 0
             item['crawl_time'] = datetime.now()
             item['update_time'] = movie.xpath('.//date[2]/text()').extract_first()
             yield scrapy.Request(url=item['url'], meta={"item": item}, callback=self.parse_detail)
