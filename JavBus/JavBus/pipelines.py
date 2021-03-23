@@ -37,8 +37,26 @@ class MySQLTwistedPipeline:
         dp_pool = adbapi.ConnectionPool('pymysql', **db_params)
         return cls(db_pool=dp_pool)
     
-    def process_item(self, item, spider):
+    def filter_item(self, result, item, spider):
+        # 过滤item，数据库中存在的则直接返回，否则进行插入操作
+        if result:
+            return item
         query = self.db_pool.runInteraction(self.do_insert, item)
+        query.addErrback(self.handle_error, item, spider)
+    
+    def process_item(self, item, spider):
+        query = None
+        if spider.name == "javBus":
+            query = self.db_pool.runQuery(
+                "SELECT serial_number FROM jav_bus WHERE serial_number=%s",
+                item['serial_number']
+            )
+        elif spider.name == "JavBusActress":
+            query = self.db_pool.runQuery(
+                "SELECT actress_name FROM jav_bus_actress where actress_name=%s",
+                item['actress_name']
+            )
+        query.addCallback(self.filter_item, item, spider)
         query.addErrback(self.handle_error, item, spider)
         return item
     
