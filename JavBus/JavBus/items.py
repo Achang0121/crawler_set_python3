@@ -75,4 +75,34 @@ class JavBusActressItem(scrapy.Item):
     actress_native = scrapy.Field()  # 出生地
     
     # 额外的参数
-    crawler_time = scrapy.Field()  # 爬取时间
+    crawl_time = scrapy.Field(
+        input_porcessor=MapCompose(date_format_convert)
+    )  # 爬取时间
+    
+    def get_insert_sql(self):
+        insert_sql = """
+            INSERT INTO jav_bus_actress(actress_photo, actress_personal_url, actress_name, actress_birthday, actress_age,
+            actress_height, actress_cup, actress_bust, actress_waist, actress_hip, actress_hobbies,
+            actress_native, crawl_time)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ON DUPLICATE KEY UPDATE
+            actress_personal_url=VALUES (actress_personal_url), actress_photo=VALUES (actress_photo),
+            actress_hip=VALUES (actress_hip), actress_cup=VALUES (actress_cup), actress_bust=VALUES (actress_bust),
+            actress_waist=VALUES (actress_waist)
+        """
+        params = (
+            self['actress_photo'],
+            self['actress_personal_url'],
+            self['actress_name'],
+            self['actress_birthday'],
+            self['actress_age'],
+            self['actress_height'],
+            self['actress_cup'],
+            self['actress_bust'],
+            self['actress_waist'],
+            self['actress_hip'],
+            self['actress_hobbies'],
+            self['actress_native'],
+            self['crawl_time']
+        )
+        return insert_sql, params

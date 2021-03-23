@@ -26,7 +26,8 @@ class JavBusSpider(scrapy.Spider):
             item['crawl_time'] = datetime.now()
             item['update_time'] = movie.xpath('.//date[2]/text()').extract_first()
             yield scrapy.Request(url=item['url'], meta={"item": item}, callback=self.parse_detail)
-        yield scrapy.Request(url=next_page_url)
+        if next_page_url != response.url:
+            yield scrapy.Request(url=next_page_url)
     
     def parse_detail(self, response):
         item = response.meta.get("item")
