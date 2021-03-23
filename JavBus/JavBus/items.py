@@ -57,3 +57,22 @@ class JavBusItem(scrapy.Item):
             self['duration']
         )
         return insert_sql, params
+
+
+class JavBusActressItem(scrapy.Item):
+    # actress 基本信息
+    actress_photo = scrapy.Field()  # 演员头像
+    actress_personal_url = scrapy.Field()  # 演员参演作品集合页面链接
+    actress_name = scrapy.Field()  # 演员名字
+    actress_birthday = scrapy.Field()  # 生日
+    actress_age = scrapy.Field()  # 年龄
+    actress_height = scrapy.Field()  # 身高
+    actress_cup = scrapy.Field()  # 欧派大小
+    actress_bust = scrapy.Field()  # 胸围
+    actress_waist = scrapy.Field()  # 腰围
+    actress_hip = scrapy.Field()  # 臀围
+    actress_hobbies = scrapy.Field()  # 兴趣
+    actress_native = scrapy.Field()  # 出生地
+    
+    # 额外的参数
+    crawler_time = scrapy.Field()  # 爬取时间

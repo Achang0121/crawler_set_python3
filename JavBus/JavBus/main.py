@@ -5,8 +5,8 @@ settings = get_project_settings()
 
 crawler = CrawlerProcess(settings)
 
-crawler.crawl('javBus')
-# crawler.crawl('javBus_uncensored')
+# crawler.crawl('javBus')
+crawler.crawl('JavBusActress')
 
 crawler.start()
 # crawler.start()

@@ -7,7 +7,6 @@
 # useful for handling different item types with a single interface
 from pymysql.cursors import DictCursor
 from twisted.enterprise import adbapi
-
 from itemadapter import ItemAdapter
 
 
