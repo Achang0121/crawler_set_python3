@@ -33,8 +33,8 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'JavBus.pipelines.JavBusPipeline': 300,
-    'JavBus.pipelines.MySQLTwistedPipeline': 400,
+    'JavBus.pipelines.MySQLTwistedPipeline': 300,
+    'scrapy_redis.pipelines.RedisPipeline': 301
 }
 
 # mysql 的一些配置
@@ -52,3 +52,8 @@ TELNETCONSOLE_PASSWORD = "123456"
 
 BASE_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.insert(0, os.path.join(BASE_DIR, "JavBus"))
+
+# scrapy-redis 的配置
+SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+REDIS_URL = 'redis://localhost:6379'
