@@ -10,7 +10,7 @@ from JavBus.items import JavBusActressItem
 class JavbusactressSpider(scrapy.Spider):
     name = 'JavBusActress'
     allowed_domains = ['javbus.com']
-    start_urls = ['https://www.javbus.com/actresses']
+    start_urls = ['https://www.javbus.com/actresses', 'https://www.dmmbus.blog/uncensored/actresses']
     
     def parse(self, response, **kwargs):
         actress_list = response.xpath('//div[contains(@class, "item")]')
