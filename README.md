@@ -7,3 +7,4 @@
 总的来说，也没啥，抓包分析的参数，有个`_signature`参数是加密的，但是不带这个参数一样可以返回想要的数据。上张图：
 ![image](https://user-images.githubusercontent.com/40299549/112621437-b5a07e00-8e64-11eb-90d3-8538eedde42b.png)
 
+用motor替换了pymongo；数据重复的问题还是存在。暂时不能访问了，等等再说了。
