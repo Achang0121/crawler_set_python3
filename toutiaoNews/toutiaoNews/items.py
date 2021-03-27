@@ -11,3 +11,4 @@ class ToutiaonewsItem(scrapy.Item):
     abstract = scrapy.Field()   # 摘要
     tag = scrapy.Field()    # 中文标签
     source_url = scrapy.Field() # 详情页url
+    _id = scrapy.Field()

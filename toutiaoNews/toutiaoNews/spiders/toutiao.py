@@ -11,7 +11,8 @@ class ToutiaoSpider(scrapy.Spider):
     custom_settings = {
         "DEFAULT_REQUEST_HEADERS": {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36',
-            'Host': 'www.toutiao.com'
+            'Host': 'www.toutiao.com',
+            'Referer': 'https://www.toutiao.com'
         }
     }
     
@@ -22,8 +23,9 @@ class ToutiaoSpider(scrapy.Spider):
             item = ToutiaonewsItem()
             item['title'] = element.get('title')
             item['abstract'] = element.get('abstract')
-            item['tag'] = element.get('chinese_tag')
+            item['tag'] = element.get('chinese_tag', element.get('tag'))
             item['source_url'] = urljoin('https://www.toutiao.com', element.get('source_url'))
+            item['_id'] = element.get('behot_time')
             yield item
 
         next_url = f'https://www.toutiao.com/api/pc/feed/?max_behot_time={next_max_behot_time}&category=news_hot&utm_source=toutiao&widen=1&tadrequire=true'

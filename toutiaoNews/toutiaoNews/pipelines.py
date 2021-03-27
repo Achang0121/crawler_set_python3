@@ -1,4 +1,5 @@
-import pymongo
+import asyncio
+from motor.motor_asyncio import AsyncIOMotorClient
 from itemadapter import ItemAdapter
 
 
@@ -22,12 +23,12 @@ class MongoDBPipeline:
         )
 
     def open_spider(self, spider):
-        self.client = pymongo.MongoClient(self.mongo_uri)
-        self.mongodb = self.client[self.mongo_db]
-
-    def close_spider(self, spider):
-        self.client.close()
+        self.connection = AsyncIOMotorClient(self.mongo_uri)
+        self.mongodb = self.connection[self.mongo_db]
 
     def process_item(self, item, spider):
-        self.mongodb[self.mongo_col].insert(dict(item))
+        asyncio.get_event_loop().run_until_complete(self._insert(item))
         return item
+
+    async def _insert(self, item):
+        await self.mongodb[self.mongo_col].insert_one(item)
