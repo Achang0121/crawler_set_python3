@@ -18,7 +18,7 @@ ITEM_PIPELINES = {
 
 IMAGES_STORE = './images'
 
-MAX_PAGE = 1   # ajax请求的唯一参数，这老外的网站反爬真没啥，全靠自觉
+MAX_PAGE = 1   # ajax请求的唯一参数，这老外的网站反爬真没啥，全靠自觉，速度太快会出问题，尽量友好点
 
 CONCURRENT_REQUESTS = 4
 RANDOMSIZE_DOWNLOAD_DEALY = True
@@ -26,5 +26,5 @@ DOWNLOAD_TIMEOUT = 100
 COOKIES_ENABLED = False
 
 
-MOMGO_URI = "mongodb://localhost:27017"
+MOMGO_URI = "mongodb://192.168.1.11:27017"
 MONGO_DB = "wallheaven"
