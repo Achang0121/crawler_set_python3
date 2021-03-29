@@ -1,5 +1,5 @@
-import asyncio
-from motor.motor_asyncio import AsyncIOMotorClient
+import pymongo
+from scrapy.exceptions import DropItem
 from itemadapter import ItemAdapter
 
 
@@ -23,12 +23,15 @@ class MongoDBPipeline:
         )
 
     def open_spider(self, spider):
-        self.connection = AsyncIOMotorClient(self.mongo_uri)
+        self.connection = pymongo.MongoClient(self.mongo_uri)
         self.mongodb = self.connection[self.mongo_db]
 
-    def process_item(self, item, spider):
-        asyncio.get_event_loop().run_until_complete(self._insert(item))
-        return item
+    def close_spider(self, spider):
+        self.connection.close()
 
-    async def _insert(self, item):
-        await self.mongodb[self.mongo_col].insert_one(item)
+    def process_item(self, item, spider):
+        is_existed = self.mongodb[self.mongo_col].find_one({'title': item['title']})
+        if is_existed:
+            raise DropItem("item已存在")
+        self.mongodb[self.mongo_col].insert_one(item)
+        return item

@@ -23,6 +23,8 @@ class ToutiaoSpider(scrapy.Spider):
             item = ToutiaonewsItem()
             item['title'] = element.get('title')
             item['abstract'] = element.get('abstract')
+            if not item['abstract']:
+                continue
             item['tag'] = element.get('chinese_tag', element.get('tag'))
             item['source_url'] = urljoin('https://www.toutiao.com', element.get('source_url'))
             item['_id'] = element.get('behot_time')
