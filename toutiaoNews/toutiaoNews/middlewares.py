@@ -2,11 +2,31 @@
 #
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-
+import requests
 from scrapy import signals
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
+
+
+class ProxyMiddleware:
+    
+    def process_request(self, request, spider):
+        proxy = self.get_proxy()['proxy']
+        request.meta['proxy'] = proxy
+
+    def process_response(self, request, response, spider):
+        if response.status != 200 or response.text == "":
+            self.delete_proxy(request.meta['proxy'])
+            request.meta['proxy'] = self.get_proxy()['proxy']
+            return request
+        return response
+
+    def get_proxy(self):
+        return requests.get('http://127.0.0.1:5010/get/').json()
+    
+    def delete_proxy(self, proxy):
+        requests.get(f"http://127.0.0.1:5010/delete/?proxy={proxy}")
 
 
 class ToutiaonewsSpiderMiddleware:
