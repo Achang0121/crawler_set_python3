@@ -26,5 +26,11 @@ DOWNLOAD_TIMEOUT = 100
 COOKIES_ENABLED = False
 
 
-MOMGO_URI = "mongodb://192.168.1.11:27017"
+MOMGO_URI = "mongodb://127.0.0.1:27017"
 MONGO_DB = "wallheaven"
+
+import os
+import sys
+BASE_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+print(BASE_DIR)
+sys.path.insert(0, os.path.join(BASE_DIR, 'wallhaven'))
