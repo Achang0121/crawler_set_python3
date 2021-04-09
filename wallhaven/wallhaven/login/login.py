@@ -22,8 +22,8 @@ def get_cookies():
 
     data = {
         "_token": token,
-        "username": "Genji0121", # 登陆账号
-        "password": "Chang1213" # 自己账号的密码，没错，这个网站明文传输密码
+        "username": "xxxxxxxx", # 登陆账号
+        "password": "xxxxxxxx" # 自己账号的密码，没错，这个网站明文传输密码
     }
 
     headers['referer'] = url_of_login_web
