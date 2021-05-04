@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import create_engine, Column, String, Integer
+from sqlalchemy import create_engine, Column, String, Integer, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
 
@@ -9,6 +9,24 @@ from db_settings import MYSQL_DATABASE, MYSQL_HOST, MYSQL_PASSWORD, MYSQL_USER
 engine = create_engine(f"mysql+mysqldb://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}/{MYSQL_DATABASE}?charset=utf8")
 
 Base = declarative_base()
+
+
+class JavBus(Base):
+    __tablename__ = 'jav_bus'
+
+    name = Column('name', String(500), comment="影片标题")
+    url = Column('url', String(200), comment="详情页链接")
+    cover_image = Column('cover_image', String(100), comment="封面图链接")
+    serial_number = Column('serial_number', String(50), primary_key=True, comment="影片番号")
+    is_censored = Column('is_censored', Integer, default=1, comment="骑兵or步兵")
+    duration = Column('duration', String(20), comment="影片时长")
+    actors = Column('actors', String(1000), default=' ', comment="演员表")
+    manufacturer = Column('manufacturer', String(50), default=' ', comment="制作商")
+    series = Column('series', String(1000), default=' ', comment="影片系列")
+    category = Column('category', String(1000), default=' ', comment="影片类别")
+    magnetic_connection = Column('magnetic_connection', String(2000), default=' ', comment="资源磁力链接")
+    crawl_time = Column('crawl_time', String(50), comment="爬取时间")
+    update_time = Column('update_time', DateTime(), comment="更新时间")
 
 
 class JavBusActress(Base):
