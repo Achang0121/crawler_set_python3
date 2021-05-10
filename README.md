@@ -11,7 +11,10 @@ PS：暂时还不清楚到底有多少不同的视频源，不过也遇到了需
 
 ---
 
+
 🔞 [某成人网站的爬虫](https://github.com/Achang0121/crawler_set_python3/tree/JavBus)，广告太多了，看着嫌烦，就有了这么个意思。
+
+🔞 [某小说网站下载脚本](https://github.com/Achang0121/crawler_set_python3/tree/main/novelsDownloader)，某吧友提的要求，刚好看到就给写了，也挺简单的。也是我矫情，还写了两个类😅，反正一次性的，用完就拉倒，其实，可以定时爬取，把更新的内容追加进文本，也算是自动追更了。总共750本，还好多没完结的，不知道啥时候能看完呢。啧啧。。。😂
 
 ---
 
