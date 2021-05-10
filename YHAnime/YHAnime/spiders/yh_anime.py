@@ -6,7 +6,7 @@ import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 
-from items import YhanimeItem
+from YHAnime.items import YhanimeItem
 
 
 class YhAnimeSpider(CrawlSpider):
